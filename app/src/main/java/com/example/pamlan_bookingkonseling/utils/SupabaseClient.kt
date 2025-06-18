@@ -2,6 +2,7 @@ package com.example.pamlan_bookingkonseling.utils
 
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.storage.Storage
+import io.ktor.client.engine.okhttp.OkHttp
 
 object  SupabaseClient {
     val client = createSupabaseClient (

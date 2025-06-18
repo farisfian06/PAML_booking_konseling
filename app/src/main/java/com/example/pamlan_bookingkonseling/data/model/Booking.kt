@@ -13,6 +13,6 @@ data class Booking(
     val sesi: String = "",
     val konselor: String = "",
     val status: String = "Pending", // Pending, Ongoing, Completed, Cancelled
-//    val ktmImageUrl: String? = null,
+    val ktmImageUrl: String? = null,
     val createdAt: Timestamp = Timestamp.now()
 )

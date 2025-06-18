@@ -2,17 +2,21 @@ package com.example.pamlan_bookingkonseling.data.repository
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.example.pamlan_bookingkonseling.data.model.Booking
 import com.example.pamlan_bookingkonseling.utils.SupabaseService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.Timestamp
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
-class BookingRepository(private val context: Context) {
+class BookingRepository() {
     private val firestore = FirebaseFirestore.getInstance()
-//    private val supabaseService = SupabaseService(context)
+    // Lazy initialization untuk supabase service
+    private val supabaseService = SupabaseService()
 
     suspend fun createBooking(booking: Booking): Result<String> {
         return try {
@@ -34,9 +38,28 @@ class BookingRepository(private val context: Context) {
         }
     }
 
+    suspend fun createBookingWithKtm(booking: Booking, imageBytes: ByteArray): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            Log.e("CREATE", "1. Mulai create booking")
+            val imageUploadResult = supabaseService.uploadKtmImage(imageBytes, booking.userId)
+            Log.e("CREATE", "berhasil up image")
+
+            imageUploadResult.fold(
+                onSuccess = { publicUrl ->
+                    val bookingWithKtm = booking.copy(ktmImageUrl = publicUrl)
+                    firestore.collection("bookings").document(booking.id).set(bookingWithKtm).await()
+                    Result.success(publicUrl)
+                },
+                onFailure = { Result.failure(it) }
+            )
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 //    suspend fun createBooking(booking: Booking, ktmImageUri: Uri?): Result<String> {
-//        return try {
+//        return withContext(Dispatchers.IO) {
+//        try {
 //            val bookingId = firestore.collection("bookings").document().id
 //            var bookingToSave = booking.copy(id = bookingId)
 //
@@ -65,6 +88,7 @@ class BookingRepository(private val context: Context) {
 //        } catch (e: Exception) {
 //            println("Create booking error: ${e.message}")
 //            Result.failure(e)
+//        }
 //        }
 //    }
 
