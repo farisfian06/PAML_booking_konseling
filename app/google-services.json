@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770243469103",
+    "project_id": "pamlan",
+    "storage_bucket": "pamlan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770243469103:android:a9536b8790aaaf98c1cbda",
+        "android_client_info": {
+          "package_name": "com.example.pamlan_bookingkonseling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDI5eSIllyXu1QcWP5pqt4ndszQRQ1rgT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
